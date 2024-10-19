@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .course-card {
+      border: 1px solid #ddd;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .course-card img {
+      width: 100%;
+      height: auto;
+      max-height: 200px;
+      object-fit: cover;
+    }
+    .btn-container {
+      margin-top: 15px;
+    }
+    .dashboard {
+      padding: 20px;
+      margin-bottom: 30px;
+      background-color: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .spinner-border {
+      width: 5rem;
+      height: 5rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Dashboard for adding projects -->
+  <section class="dashboard container">
+    <h2 class="text-center">Add a New Project</h2>
+    <form id="project-form">
+      <div class="form-group">
+        <label for="projectType">Project Type</label>
+        <input type="text" id="projectType" class="form-control" placeholder="Enter project type" required>
+      </div>
+      <div class="form-group">
+        <label for="projectTitle">Project Title</label>
+        <input type="text" id="projectTitle" class="form-control" placeholder="Enter project title" required>
+      </div>
+      <div class="form-group">
+        <label for="projectDescription">Project Description</label>
+        <textarea id="projectDescription" class="form-control" placeholder="Enter project description" rows="3" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="projectImage">Image URL</label>
+        <input type="text" id="projectImage" class="form-control" placeholder="Enter image URL" required>
+      </div>
+      <div class="form-group">
+        <label for="projectLink">Project Link</label>
+        <input type="url" id="projectLink" class="form-control" placeholder="Enter project link" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Add Project</button>
+    </form>
+  </section>
+
+  <!-- Section to display projects -->
+  <section id="projects-container" class="container"></section>
+
+  <script>
+    // Existing projects data
+    let projectGroup = [
+      {
+        projecttype: "Front End Project",
+        courses: [
+          {
+            title: "Book_marker",
+            description: "Website for saving your website links",
+            image: "assets/images/ProjectF/bookmarker.png",
+            buttons: [{ text: "Learn More", type: "primary" }],
+            link: 'https://ali-ashraf-510.github.io/book-marker/'
+          },
+          {
+            title: "Weather App",
+            description: "Website to show current weather in all countries",
+            image: "assets/images/ProjectF/weatherApp.png",
+            buttons: [{ text: "Learn More", type: "primary" }],
+            link: 'https://ali-ashraf-510.github.io/weather-website/'
+          },
+          {
+            title: "Mr Khaled",
+            description: "Teacher website to learn English",
+            image: "assets/images/ProjectF/c4.jpg",
+            buttons: [{ text: "Learn More", type: "primary" }],
+            link: 'https://ali-ashraf-510.github.io/mr-khaled/'
+          }
+        ]
+      }
+    ];
+
+    // Function to render projects
+    function renderProjects() {
+      const container = document.getElementById('projects-container');
+      container.innerHTML = ''; // Clear the container
+
+      if (projectGroup.length > 0) {
+        projectGroup.forEach(group => {
+          const section = document.createElement('section');
+          section.innerHTML = `
+            <h2 class="text-center">${group.projecttype}</h2>
+            <div class="courses-container container">
+              <div class="row">
+              ${group.courses.map(course => `
+                <div class="col-md-4 mt-1">
+                  <div class="course-card">
+                    <img src="${course.image}" alt="${course.title}">
+                    <h3>${course.title}</h3>
+                    <p>${course.description}</p>
+                    <div class="btn-container text-center">
+                      <a href="${course.link}" class="btn btn-primary" role="button">${course.buttons[0].text}</a>
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+              </div>
+            </div>
+          `;
+          container.appendChild(section);
+        });
+      }
+    }
+    <a href="index.html" class="btn btn-secondary">العودة إلى الصفحة الرئيسية</a>
+
+    // Function to add a new project
+    document.getElementById('project-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const projectType = document.getElementById('projectType').value;
+      const projectTitle = document.getElementById('projectTitle').value;
+      const projectDescription = document.getElementById('projectDescription').value;
+      const projectImage = document.getElementById('projectImage').value;
+      const projectLink = document.getElementById('projectLink').value;
+
+      const newProject = {
+        projecttype: projectType,
+        courses: [{
+          title: projectTitle,
+          description: projectDescription,
+          image: projectImage,
+          buttons: [{ text: "Learn More", type: "primary" }],
+          link: projectLink
+        }]
+      };
+
+      const projects = JSON.parse(localStorage.getItem('projects')) || [];
+      projects.push(newProject);
+      localStorage.setItem('projects', JSON.stringify(projects));
+
+      document.getElementById('project-form').reset();
+      alert('تمت إضافة المشروع بنجاح!');
+    });
+  </script>
+</body>
+</html>
